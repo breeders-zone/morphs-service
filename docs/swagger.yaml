@@ -1,0 +1,9 @@
+basePath: /
+host: localhost:3000
+info:
+  contact: {}
+  description: Morphs service API
+  title: Morphs service API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

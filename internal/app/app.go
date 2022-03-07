@@ -6,7 +6,11 @@ import (
 
 	"github.com/breeders-zone/morphs-service/internal/config"
 	"github.com/breeders-zone/morphs-service/internal/handlers/http"
+	"github.com/breeders-zone/morphs-service/internal/repositories"
+	"github.com/breeders-zone/morphs-service/internal/services"
 	"github.com/gofiber/fiber/v2"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 // @title Morphs service API
@@ -24,10 +28,20 @@ func Run() {
 	if err != nil {
 		log.Fatalf("not load config")
 	}
+	
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=5432 sslmode=disable", conf.DBConfig.Server, conf.DBConfig.User, conf.DBConfig.Password, conf.DBConfig.Name)
+	db, err := sqlx.Connect("postgres", dsn)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	repos := repositories.NewRepositories(db)
+	services := services.NewServices(repos)
+	
 
 	fmt.Print(conf)
 
-	h := http.NewHandler()
+	h := http.NewHandler(services)
 
 	h.Init(app)
 

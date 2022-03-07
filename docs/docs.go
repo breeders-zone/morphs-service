@@ -15,7 +15,422 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/genes": {
+            "post": {
+                "description": "Create Gene",
+                "consumes": [
+                    "application/vnd.api+json"
+                ],
+                "produces": [
+                    "application/vnd.api+json"
+                ],
+                "tags": [
+                    "genes"
+                ],
+                "summary": "Create Gene",
+                "parameters": [
+                    {
+                        "description": "Gene request",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/responses.GeneResponse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GeneResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/api2go.Error"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api2go.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/genes/{id}": {
+            "get": {
+                "description": "Get gene by ID",
+                "consumes": [
+                    "application/vnd.api+json"
+                ],
+                "produces": [
+                    "application/vnd.api+json"
+                ],
+                "tags": [
+                    "genes"
+                ],
+                "summary": "Get gene by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Gene ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GeneResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api2go.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api2go.Error"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Gene",
+                "consumes": [
+                    "application/vnd.api+json"
+                ],
+                "produces": [
+                    "application/vnd.api+json"
+                ],
+                "tags": [
+                    "genes"
+                ],
+                "summary": "Update Gene",
+                "parameters": [
+                    {
+                        "description": "Gene request",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/responses.GeneResponse"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Gene ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GeneResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api2go.Error"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/api2go.Error"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api2go.Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Gene",
+                "consumes": [
+                    "application/vnd.api+json"
+                ],
+                "produces": [
+                    "application/vnd.api+json"
+                ],
+                "tags": [
+                    "genes"
+                ],
+                "summary": "Delete Gene",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Gene ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api2go.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api2go.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api2go.Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "links": {
+                    "$ref": "#/definitions/api2go.ErrorLinks"
+                },
+                "meta": {},
+                "source": {
+                    "$ref": "#/definitions/api2go.ErrorSource"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "api2go.ErrorLinks": {
+            "type": "object",
+            "properties": {
+                "about": {
+                    "type": "string"
+                }
+            }
+        },
+        "api2go.ErrorSource": {
+            "type": "object",
+            "properties": {
+                "parameter": {
+                    "type": "string"
+                },
+                "pointer": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Gene": {
+            "type": "object",
+            "properties": {
+                "availability": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "history": {
+                    "type": "string"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "producedDate": {
+                    "type": "string"
+                },
+                "producedName": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "jsonapi.Data": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "links": {
+                    "$ref": "#/definitions/jsonapi.Links"
+                },
+                "meta": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "relationships": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/jsonapi.Relationship"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "jsonapi.Link": {
+            "type": "object",
+            "properties": {
+                "href": {
+                    "type": "string"
+                },
+                "meta": {
+                    "$ref": "#/definitions/jsonapi.Meta"
+                }
+            }
+        },
+        "jsonapi.Links": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/jsonapi.Link"
+            }
+        },
+        "jsonapi.Meta": {
+            "type": "object",
+            "additionalProperties": true
+        },
+        "jsonapi.Relationship": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/jsonapi.RelationshipDataContainer"
+                },
+                "links": {
+                    "$ref": "#/definitions/jsonapi.Links"
+                },
+                "meta": {
+                    "type": "object",
+                    "additionalProperties": true
+                }
+            }
+        },
+        "jsonapi.RelationshipData": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "jsonapi.RelationshipDataContainer": {
+            "type": "object",
+            "properties": {
+                "dataArray": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/jsonapi.RelationshipData"
+                    }
+                },
+                "dataObject": {
+                    "$ref": "#/definitions/jsonapi.RelationshipData"
+                }
+            }
+        },
+        "responses.GeneResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "attributes": {
+                            "$ref": "#/definitions/domain.Gene"
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "links": {
+                            "x-omitempty": true,
+                            "$ref": "#/definitions/jsonapi.Links"
+                        },
+                        "meta": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            },
+                            "x-omitempty": true
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "included": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/jsonapi.Data"
+                    },
+                    "x-omitempty": true
+                },
+                "links": {
+                    "x-omitempty": true,
+                    "$ref": "#/definitions/jsonapi.Links"
+                },
+                "meta": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "x-omitempty": true
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it

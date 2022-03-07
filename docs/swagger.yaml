@@ -1,9 +1,283 @@
 basePath: /
+definitions:
+  api2go.Error:
+    properties:
+      code:
+        type: string
+      detail:
+        type: string
+      id:
+        type: string
+      links:
+        $ref: '#/definitions/api2go.ErrorLinks'
+      meta: {}
+      source:
+        $ref: '#/definitions/api2go.ErrorSource'
+      status:
+        type: string
+      title:
+        type: string
+    type: object
+  api2go.ErrorLinks:
+    properties:
+      about:
+        type: string
+    type: object
+  api2go.ErrorSource:
+    properties:
+      parameter:
+        type: string
+      pointer:
+        type: string
+    type: object
+  domain.Gene:
+    properties:
+      availability:
+        type: string
+      createdAt:
+        type: string
+      description:
+        type: string
+      history:
+        type: string
+      links:
+        items:
+          type: string
+        type: array
+      producedDate:
+        type: string
+      producedName:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+    type: object
+  jsonapi.Data:
+    properties:
+      attributes:
+        items:
+          type: integer
+        type: array
+      id:
+        type: string
+      links:
+        $ref: '#/definitions/jsonapi.Links'
+      meta:
+        items:
+          type: integer
+        type: array
+      relationships:
+        additionalProperties:
+          $ref: '#/definitions/jsonapi.Relationship'
+        type: object
+      type:
+        type: string
+    type: object
+  jsonapi.Link:
+    properties:
+      href:
+        type: string
+      meta:
+        $ref: '#/definitions/jsonapi.Meta'
+    type: object
+  jsonapi.Links:
+    additionalProperties:
+      $ref: '#/definitions/jsonapi.Link'
+    type: object
+  jsonapi.Meta:
+    additionalProperties: true
+    type: object
+  jsonapi.Relationship:
+    properties:
+      data:
+        $ref: '#/definitions/jsonapi.RelationshipDataContainer'
+      links:
+        $ref: '#/definitions/jsonapi.Links'
+      meta:
+        additionalProperties: true
+        type: object
+    type: object
+  jsonapi.RelationshipData:
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+    type: object
+  jsonapi.RelationshipDataContainer:
+    properties:
+      dataArray:
+        items:
+          $ref: '#/definitions/jsonapi.RelationshipData'
+        type: array
+      dataObject:
+        $ref: '#/definitions/jsonapi.RelationshipData'
+    type: object
+  responses.GeneResponse:
+    properties:
+      data:
+        properties:
+          attributes:
+            $ref: '#/definitions/domain.Gene'
+          id:
+            type: string
+          links:
+            $ref: '#/definitions/jsonapi.Links'
+            x-omitempty: true
+          meta:
+            items:
+              type: integer
+            type: array
+            x-omitempty: true
+          type:
+            type: string
+        type: object
+      included:
+        items:
+          $ref: '#/definitions/jsonapi.Data'
+        type: array
+        x-omitempty: true
+      links:
+        $ref: '#/definitions/jsonapi.Links'
+        x-omitempty: true
+      meta:
+        additionalProperties: true
+        type: object
+        x-omitempty: true
+    type: object
 host: localhost:3000
 info:
   contact: {}
   description: Morphs service API
   title: Morphs service API
   version: "1.0"
-paths: {}
+paths:
+  /genes:
+    post:
+      consumes:
+      - application/vnd.api+json
+      description: Create Gene
+      parameters:
+      - description: Gene request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/responses.GeneResponse'
+      produces:
+      - application/vnd.api+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GeneResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/api2go.Error'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api2go.Error'
+      summary: Create Gene
+      tags:
+      - genes
+  /genes/{id}:
+    delete:
+      consumes:
+      - application/vnd.api+json
+      description: Delete Gene
+      parameters:
+      - description: Gene ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/vnd.api+json
+      responses:
+        "204":
+          description: ""
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api2go.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api2go.Error'
+      summary: Delete Gene
+      tags:
+      - genes
+    get:
+      consumes:
+      - application/vnd.api+json
+      description: Get gene by ID
+      parameters:
+      - description: Gene ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/vnd.api+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GeneResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api2go.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api2go.Error'
+      summary: Get gene by ID
+      tags:
+      - genes
+    put:
+      consumes:
+      - application/vnd.api+json
+      description: Update Gene
+      parameters:
+      - description: Gene request
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/responses.GeneResponse'
+      - description: Gene ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/vnd.api+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GeneResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api2go.Error'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            items:
+              $ref: '#/definitions/api2go.Error'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api2go.Error'
+      summary: Update Gene
+      tags:
+      - genes
 swagger: "2.0"

@@ -9,10 +9,10 @@ type Config struct {
 }
 
 type DBConfig struct {
-	Server   string `mapstructure:"DB_NAME"`
-	User     string `mapstructure:"DB_SERVER"`
-	Password string `mapstructure:"DB_USER"`
-	Name     string `mapstructure:"DB_PASSWORD"`
+	Server   string `mapstructure:"DB_SERVER"`
+	User     string `mapstructure:"DB_USER"`
+	Password string `mapstructure:"DB_PASSWORD"`
+	Name     string `mapstructure:"DB_NAME"`
 }
 
 // Init populates Config struct with values from config file

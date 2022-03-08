@@ -37,9 +37,6 @@ func Run() {
 
 	repos := repositories.NewRepositories(db)
 	services := services.NewServices(repos)
-	
-
-	fmt.Print(conf)
 
 	h := http.NewHandler(services)
 

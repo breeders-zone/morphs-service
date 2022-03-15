@@ -63,6 +63,21 @@ func (mr *MockGenesMockRecorder) Delete(id interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockGenes)(nil).Delete), id)
 }
 
+// GetAll mocks base method.
+func (m *MockGenes) GetAll(order []string) ([]domain.Gene, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAll", order)
+	ret0, _ := ret[0].([]domain.Gene)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAll indicates an expected call of GetAll.
+func (mr *MockGenesMockRecorder) GetAll(order interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockGenes)(nil).GetAll), order)
+}
+
 // GetById mocks base method.
 func (m *MockGenes) GetById(id int) (*domain.Gene, error) {
 	m.ctrl.T.Helper()

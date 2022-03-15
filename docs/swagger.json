@@ -10,6 +10,39 @@
     "basePath": "/",
     "paths": {
         "/genes": {
+            "get": {
+                "description": "Get genes",
+                "consumes": [
+                    "application/vnd.api+json"
+                ],
+                "produces": [
+                    "application/vnd.api+json"
+                ],
+                "tags": [
+                    "genes"
+                ],
+                "summary": "Get genes",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GenesResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api2go.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api2go.Error"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create Gene",
                 "consumes": [
@@ -385,6 +418,55 @@
                     "properties": {
                         "attributes": {
                             "$ref": "#/definitions/domain.Gene"
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "links": {
+                            "x-omitempty": true,
+                            "$ref": "#/definitions/jsonapi.Links"
+                        },
+                        "meta": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            },
+                            "x-omitempty": true
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "included": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/jsonapi.Data"
+                    },
+                    "x-omitempty": true
+                },
+                "links": {
+                    "x-omitempty": true,
+                    "$ref": "#/definitions/jsonapi.Links"
+                },
+                "meta": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "x-omitempty": true
+                }
+            }
+        },
+        "responses.GenesResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "attributes": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Gene"
+                            }
                         },
                         "id": {
                             "type": "string"

@@ -146,6 +146,40 @@ definitions:
         type: object
         x-omitempty: true
     type: object
+  responses.GenesResponse:
+    properties:
+      data:
+        properties:
+          attributes:
+            items:
+              $ref: '#/definitions/domain.Gene'
+            type: array
+          id:
+            type: string
+          links:
+            $ref: '#/definitions/jsonapi.Links'
+            x-omitempty: true
+          meta:
+            items:
+              type: integer
+            type: array
+            x-omitempty: true
+          type:
+            type: string
+        type: object
+      included:
+        items:
+          $ref: '#/definitions/jsonapi.Data'
+        type: array
+        x-omitempty: true
+      links:
+        $ref: '#/definitions/jsonapi.Links'
+        x-omitempty: true
+      meta:
+        additionalProperties: true
+        type: object
+        x-omitempty: true
+    type: object
 host: localhost:3000
 info:
   contact: {}
@@ -154,6 +188,28 @@ info:
   version: "1.0"
 paths:
   /genes:
+    get:
+      consumes:
+      - application/vnd.api+json
+      description: Get genes
+      produces:
+      - application/vnd.api+json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GenesResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api2go.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api2go.Error'
+      summary: Get genes
+      tags:
+      - genes
     post:
       consumes:
       - application/vnd.api+json

@@ -9,20 +9,20 @@ import (
 )
 
 type Gene struct {
-	Id           int       `json:"-"`
-	Title        string    `json:"title"`
-	Type         string    `json:"type"`
-	ProducedName string    `json:"producedName" db:"produced_name"`
-	ProducedDate time.Time `json:"producedDate" db:"produced_date"`
-	Availability string    `json:"availability"`
-	Description  string    `json:"description"`
-	History      string    `json:"history"`
-	Links        Links     `json:"links"`
+	Id           int       `json:"-" selector:"id"`
+	Title        string    `json:"title,omitempty" selector:"title"`
+	Type         string    `json:"type,omitempty" selector:"type"`
+	ProducedName string    `json:"producedName,omitempty" selector:"producedName" db:"produced_name"`
+	ProducedDate *time.Time `json:"producedDate,omitempty" selector:"producedDate" db:"produced_date"`
+	Availability string    `json:"availability,omitempty" selector:"availability"`
+	Description  string    `json:"description,omitempty" selector:"description"`
+	History      string    `json:"history,omitempty" selector:"history"`
+	Links        Links     `json:"links,omitempty" selector:"links"`
 
-	CreatedAt time.Time `json:"createdAt" db:"created_at"`
+	CreatedAt *time.Time `json:"createdAt,omitempty" db:"created_at"`
 }
 
-func (g *Gene) GetID() string {
+func (g Gene) GetID() string {
 	return fmt.Sprint(g.Id)
 }
 

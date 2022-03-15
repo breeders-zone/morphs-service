@@ -8,3 +8,7 @@ func SliceContainsString(s []string, e string) bool {
     }
     return false
 }
+
+func ToGenericArray(arr ...interface{}) []interface{} {
+    return arr
+}

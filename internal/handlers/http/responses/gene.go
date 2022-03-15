@@ -19,3 +19,14 @@ type GeneResponse struct {
 		Meta       json.RawMessage `json:"meta,omitempty" extensions:"x-omitempty"`
 	} `json:"data"`
 }
+
+type GenesResponse struct {
+	GeneResponse
+	Data struct {
+		Type       string          `json:"type"`
+		ID         string          `json:"id"`
+		Attributes []domain.Gene   `json:"attributes"`
+		Links      jsonapi.Links   `json:"links,omitempty" extensions:"x-omitempty"`
+		Meta       json.RawMessage `json:"meta,omitempty" extensions:"x-omitempty"`
+	} `json:"data"`
+}

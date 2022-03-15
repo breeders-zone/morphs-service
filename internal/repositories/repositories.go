@@ -10,6 +10,7 @@ type Repositories struct {
 }
 
 type Genes interface {
+	GetAll(order []string) ([]domain.Gene, error)
 	Create(g *domain.Gene) (*domain.Gene, error)
 	Update(g *domain.Gene) (*domain.Gene, error)
 	Delete(id int) (error)

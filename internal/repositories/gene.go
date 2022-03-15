@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/breeders-zone/morphs-service/internal/domain"
+	"github.com/breeders-zone/morphs-service/utils"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -16,6 +17,20 @@ func NewGenesRepo(db *sqlx.DB) *GenesRepo {
 	return &GenesRepo{
 		db,
 	}
+}
+
+func (r *GenesRepo) GetAll(order []string) ([]domain.Gene, error) {
+
+	orderStr := utils.GenerateOrderString(order)
+
+	g := []domain.Gene{}
+	err := r.db.Select(&g, "SELECT * FROM genes " + orderStr)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return g, nil
 }
 
 func (r *GenesRepo) GetById(id int) (*domain.Gene, error) {

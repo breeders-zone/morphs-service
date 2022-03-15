@@ -15,6 +15,10 @@ func NewGenesService(repo repositories.Genes) *GenesService {
 	}
 }
 
+func (s *GenesService) GetAll(order []string) ([]domain.Gene, error) {
+	return s.repo.GetAll(order)
+}
+
 func (s *GenesService) GetById(id int) (*domain.Gene, error) {
 	return s.repo.GetById(id)
 }

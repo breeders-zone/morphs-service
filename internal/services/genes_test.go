@@ -20,12 +20,12 @@ var gene = &domain.Gene{
 	Title:        "test",
 	Type:         "type",
 	ProducedName: "name",
-	ProducedDate: time.Time{},
+	ProducedDate: &time.Time{},
 	Availability: "high",
 	Description:  "desc",
 	History:      "hist",
 	Links:        []string{"1", "2"},
-	CreatedAt:    time.Time{},
+	CreatedAt:    &time.Time{},
 }
 
 func mockGenesService(t *testing.T) (*services.GenesService, *mockRepos.MockGenes) {
@@ -42,6 +42,29 @@ func mockGenesService(t *testing.T) (*services.GenesService, *mockRepos.MockGene
 
 	return geneService, mockGenesRepo
 }
+
+func Test_GenesService_GetAll(t *testing.T) {
+	genesService, mockGenesRepo := mockGenesService(t)
+
+	mockGenesRepo.EXPECT().GetAll(gomock.Any()).Return([]domain.Gene{{Id: 5}, {Id: 6}}, nil)
+
+	res, err := genesService.GetAll([]string{})
+
+	require.NoError(t, err)
+	require.Equal(t, []domain.Gene{{Id: 5}, {Id: 6}}, res)
+}
+
+func Test_GenesService_GetAll_Err(t *testing.T) {
+	genesService, mockGenesRepo := mockGenesService(t)
+
+	mockGenesRepo.EXPECT().GetAll(gomock.Any()).Return([]domain.Gene{}, errInternalServErr)
+
+	res, err := genesService.GetAll([]string{})
+
+	require.True(t, errors.Is(err, errInternalServErr))
+	require.Equal(t, []domain.Gene{}, res)
+}
+
 
 func Test_GenesService_GetById(t *testing.T) {
 	genesService, mockGenesRepo := mockGenesService(t)

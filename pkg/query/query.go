@@ -98,14 +98,13 @@ func parseBracketParams(qs string, o *Options) error {
 			if o.Fields == nil {
 				o.Fields = map[string][]string{}
 			}
-
 			// check for array
 			if commaRE.MatchString(values[i][1]) {
 				o.Fields[term[2]] = commaRE.Split(values[i][1], -1)
 				continue
 			}
 
-			o.Filter[term[2]] = []string{values[i][1]}
+			o.Fields[term[2]] = []string{values[i][1]}
 		case "filter":
 			if o.Filter == nil {
 				o.Filter = map[string][]string{}

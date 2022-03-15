@@ -24,6 +24,8 @@ func (h Handler) Init(app *fiber.App) {
 		return c.Status(200).SendString("pong")
 	})
 
+
+	app.Get("/genes", h.GetGenes)
 	app.Get("/genes/:id", h.GetGene)
 	app.Post("/genes", h.CreateGene)
 	app.Put("/genes/:id", h.UpdateGene)

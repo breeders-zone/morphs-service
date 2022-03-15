@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/breeders-zone/morphs-service/internal/domain"
+	"github.com/breeders-zone/morphs-service/pkg/query"
+	"github.com/breeders-zone/morphs-service/pkg/selector"
 	"github.com/breeders-zone/morphs-service/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/manyminds/api2go"
@@ -13,14 +15,14 @@ import (
 )
 
 type CreateGeneRequest struct {
-	Title        string    `json:"title" validate:"required"`
-	Type         string    `json:"type" validate:"required"`
-	ProducedName string    `json:"producedName" validate:"required"`
-	ProducedDate time.Time `json:"producedDate" validate:"required"`
-	Availability string    `json:"availability" validate:"required"`
-	Description  string    `json:"description" validate:"required"`
-	History      string    `json:"history" validate:"required"`
-	Links        []string  `json:"links" validate:"required"`
+	Title        string     `json:"title" validate:"required"`
+	Type         string     `json:"type" validate:"required"`
+	ProducedName string     `json:"producedName" validate:"required"`
+	ProducedDate *time.Time `json:"producedDate" validate:"required"`
+	Availability string     `json:"availability" validate:"required"`
+	Description  string     `json:"description" validate:"required"`
+	History      string     `json:"history" validate:"required"`
+	Links        []string   `json:"links" validate:"required"`
 }
 
 func (r *CreateGeneRequest) GetName() string {
@@ -32,15 +34,15 @@ func (r *CreateGeneRequest) SetID(sId string) error {
 }
 
 type UpdateGeneRequest struct {
-	Id           int       `json:"-"`
-	Title        string    `json:"title" validate:"required"`
-	Type         string    `json:"type" validate:"required"`
-	ProducedName string    `json:"producedName" validate:"required"`
-	ProducedDate time.Time `json:"producedDate" validate:"required"`
-	Availability string    `json:"availability" validate:"required"`
-	Description  string    `json:"description" validate:"required"`
-	History      string    `json:"history" validate:"required"`
-	Links        []string  `json:"links" validate:"required"`
+	Id           int        `json:"-"`
+	Title        string     `json:"title" validate:"required"`
+	Type         string     `json:"type" validate:"required"`
+	ProducedName string     `json:"producedName" validate:"required"`
+	ProducedDate *time.Time `json:"producedDate" validate:"required"`
+	Availability string     `json:"availability" validate:"required"`
+	Description  string     `json:"description" validate:"required"`
+	History      string     `json:"history" validate:"required"`
+	Links        []string   `json:"links" validate:"required"`
 }
 
 func (r *UpdateGeneRequest) GetName() string {
@@ -58,6 +60,49 @@ func (r *UpdateGeneRequest) SetID(sId string) error {
 	return nil
 }
 
+// GetGenes
+// @Summary      Get genes
+// @Description  Get genes
+// @Tags         genes
+// @Accept       json-api
+// @Produce      json-api
+// @Success      200  {object} responses.GenesResponse
+// @Failure		 404,500 {object} api2go.Error
+// @Router       /genes [get]
+func (h *Handler) GetGenes(c *fiber.Ctx) error {
+	c.Set(fiber.HeaderContentType, "application/vnd.api+json")
+
+	q, err := query.FromQuerystring(c.Context().URI().QueryArgs().String())
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&api2go.Error{
+			Status: fmt.Sprint(fiber.StatusInternalServerError),
+			Title:  "Error",
+		})
+	}
+
+	g, err := h.services.Genes.GetAll(q.Sort)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&api2go.Error{
+			Status: fmt.Sprint(fiber.StatusInternalServerError),
+			Title:  "Error",
+		})
+	}
+
+	if len(q.Fields["genes"]) != 0 {
+		for idx, i := range g {
+			q.Fields["genes"] = append(q.Fields["genes"], "id")
+			g[idx] = selector.SelectFields(&i, q.Fields["genes"]...).(domain.Gene)
+		}
+	}
+
+	j, err := jsonapi.Marshal(g)
+	if err != nil {
+		return err
+	}
+
+	return c.Send(j)
+}
+
 // GetGene
 // @Summary      Get gene by ID
 // @Description  Get gene by ID
@@ -71,6 +116,13 @@ func (r *UpdateGeneRequest) SetID(sId string) error {
 func (h *Handler) GetGene(c *fiber.Ctx) error {
 	c.Set(fiber.HeaderContentType, "application/vnd.api+json")
 
+	q, err := query.FromQuerystring(c.Context().URI().QueryArgs().String())
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&api2go.Error{
+			Status: fmt.Sprint(fiber.StatusInternalServerError),
+			Title:  "Error",
+		})
+	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err
@@ -82,6 +134,12 @@ func (h *Handler) GetGene(c *fiber.Ctx) error {
 			Status: fmt.Sprint(fiber.StatusNotFound),
 			Title:  "Not found",
 		})
+	}
+
+	if len(q.Fields["genes"]) != 0 {
+		q.Fields["genes"] = append(q.Fields["genes"], "id")
+		tmpG := selector.SelectFields(g, q.Fields["genes"]...).(domain.Gene)
+		g = &tmpG
 	}
 
 	j, err := jsonapi.Marshal(g)
